@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
@@ -61,16 +62,20 @@ namespace simplexLaba
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!validateData())
+            if (!validateData(comboBox2.SelectedIndex))
                 return;
+
             dataGridToArray();
-
-            simplexMethodForm SMF = new simplexMethodForm(arr, funArr, basis, (int)variablesUpDown.Value, (int)equationsUpDown.Value);
-            SMF.Show();
-
-            
-            //startBtn.Enabled = false;
-            //nextStepBtn.Visible = true;
+            if (comboBox2.SelectedIndex == 0)
+            {
+                simplexMethodForm SMF = new simplexMethodForm(arr, funArr, basis, (int)variablesUpDown.Value, (int)equationsUpDown.Value, false, null);
+                SMF.Show();
+            }
+            else
+            {
+                ArtificialBasisForm ABF = new ArtificialBasisForm(arr, funArr, (int)variablesUpDown.Value, (int)equationsUpDown.Value);
+                ABF.Show();
+            }
         }
 
         private void dataGridToArray()
@@ -139,7 +144,7 @@ namespace simplexLaba
             functionDataGrid.Rows[1].HeaderCell.Value = "Ограничения";
         }
 
-        private bool validateData()
+        private bool validateData(int method)
         {
             bool f = true;
             foreach (DataGridViewRow row in functionDataGrid.Rows)
@@ -170,22 +175,30 @@ namespace simplexLaba
                         cell.ErrorText = null;
                     }
                 }
-            if (!Regex.Match(textBox1.Text.ToString(), "(^(\\d,)+\\d$)|(^\\d$)").Success)
+            if (method == 0)
             {
-                label4.Visible = true;
-                f = false;
-            }
-            int col = 0;
-            basis = Array.ConvertAll<string, int>(textBox1.Text.Split(','), int.Parse);
-            for (int i = 0; i < basis.Length; i++)
-            {
-                if (basis[i] != 0)
-                    col++;
-            }
-            if (col != equationsUpDown.Value)
-            {
-                MessageBox.Show("Количество базисных переменных должно быть равно количеству ограничений");
-                f = false;
+                if (!Regex.Match(textBox1.Text.ToString(), "(^(\\d,)+\\d$)|(^\\d$)").Success)
+                {
+                    label4.Visible = true;
+                    f = false;
+                }
+                int col = 0;
+                try
+                {
+                    basis = Array.ConvertAll<string, int>(textBox1.Text.Split(','), int.Parse);
+                    for (int i = 0; i < basis.Length; i++)
+                    {
+                        if (basis[i] != 0)
+                            col++;
+                    }
+
+                    if (col != equationsUpDown.Value)
+                    {
+                        MessageBox.Show("Количество базисных переменных должно быть равно количеству ограничений");
+                        f = false;
+                    }
+                }
+                catch (Exception e) { }
             }
             return f;
         }
@@ -195,7 +208,7 @@ namespace simplexLaba
             e.Cancel = false;
         }
 
-        
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             label4.Visible = false;

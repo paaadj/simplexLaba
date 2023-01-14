@@ -38,7 +38,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -97,12 +96,12 @@
             this.functionDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.functionDataGrid.Location = new System.Drawing.Point(245, 30);
             this.functionDataGrid.Name = "functionDataGrid";
-            this.functionDataGrid.Size = new System.Drawing.Size(843, 367);
+            this.functionDataGrid.Size = new System.Drawing.Size(271, 131);
             this.functionDataGrid.TabIndex = 5;
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(245, 403);
+            this.startBtn.Location = new System.Drawing.Point(245, 491);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(75, 23);
             this.startBtn.TabIndex = 6;
@@ -139,15 +138,6 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Базис должен быть записан \r\nчерез запятую";
             this.label4.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(245, 443);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "label5";
             // 
             // button1
             // 
@@ -223,7 +213,6 @@
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox1);
@@ -255,7 +244,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ComboBox comboBox1;

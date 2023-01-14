@@ -21,3 +21,4 @@ C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.exe
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.pdb
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.simplexMethodForm.resources
+C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.ArtificialBasisForm.resources
