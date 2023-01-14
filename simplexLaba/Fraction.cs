@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace simplexLaba
 {
-    internal class Fraction
+    public class Fraction
     {
         public Int64 numerator { get; set; }
         public Int64 denominator { get; set; }

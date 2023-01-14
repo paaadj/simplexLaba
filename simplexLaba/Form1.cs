@@ -25,6 +25,7 @@ namespace simplexLaba
         int[] basis;
         Fraction[,] startArr;
 
+
         public Form1()
         {
             InitializeComponent();
@@ -38,15 +39,11 @@ namespace simplexLaba
             functionDataGrid.AllowUserToAddRows = false;
             functionDataGrid.EnableHeadersVisualStyles = false;
             functionDataGrid.RowHeadersWidth = 120;
+            functionDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             functionDataGrid.RowHeadersVisible = true;
-
-            resultDataGrid.RowHeadersVisible = false;
-            resultDataGrid.AllowUserToResizeRows = false;
-            resultDataGrid.AllowUserToResizeColumns = false;
-            resultDataGrid.ReadOnly = true;
-            resultDataGrid.EnableHeadersVisualStyles = false;
-            resultDataGrid.RowHeadersWidth = 120;
-            resultDataGrid.RowHeadersVisible = true;
+            functionDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            functionDataGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            functionDataGrid.AutoSize = true;
 
             functionDataGrid.ColumnCount = 3;
             functionDataGrid.RowCount = 3;
@@ -57,6 +54,9 @@ namespace simplexLaba
             equationsUpDown.Maximum = 16;
             equationsUpDown.Minimum = 1;
             equationsUpDown.Value = 1;
+
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -64,61 +64,13 @@ namespace simplexLaba
             if (!validateData())
                 return;
             dataGridToArray();
-            Gaus();
-            swapToNormal();
-            arrayToDataGrid();
 
-            if (!solveGoalFunction())
-            {
-                MessageBox.Show("Система несовместна");
-                return;
-            }
-            arrayToDataGrid();
-            step();
+            simplexMethodForm SMF = new simplexMethodForm(arr, funArr, basis, (int)variablesUpDown.Value, (int)equationsUpDown.Value);
+            SMF.Show();
+
+            
             //startBtn.Enabled = false;
-            nextStepBtn.Visible = true;
-        }
-
-        private void swap(int basisInd, int swapInd)
-        {
-            if (basisInd == swapInd)
-                return;
-            for(int i = 0; i < arr.GetLength(0); i++)
-            {
-                Fraction tmp = arr[i, swapInd];
-                arr[i, swapInd] = arr[i, basisInd];
-                arr[i, basisInd] = tmp;
-            }
-        }
-        private void swapToNormal()
-        {
-            int index = 0;
-            for (int i = 0; i < basis.Length; i++)
-            {
-                if (basis[i] != 0)
-                {
-                    index++;
-                }
-            }
-            index--;
-            for (int i = basis.Length - 1; i >= 0; i--)
-            {
-                if (basis[i] != 0)
-                {
-                    if (i == index)
-                    {
-                        index--;
-                        continue;
-                    }
-                    for(int j = 0; j < arr.GetLength(0); j++)
-                    {
-                        Fraction tmp = arr[j, i];
-                        arr[j, i] = arr[j, index];
-                        arr[j, index] = tmp;
-                    }
-                    index--;
-                }
-            }
+            //nextStepBtn.Visible = true;
         }
 
         private void dataGridToArray()
@@ -144,10 +96,20 @@ namespace simplexLaba
                 {
                     if (cell.RowIndex == 0)
                     {
-                        if (cell.FormattedValue.ToString().IndexOf("/") == -1)
-                            funArr[cell.ColumnIndex] = new Fraction(Convert.ToInt64(cell.FormattedValue.ToString()), 1);
+                        if (comboBox1.SelectedIndex == 0)
+                        {
+                            if (cell.FormattedValue.ToString().IndexOf("/") == -1)
+                                funArr[cell.ColumnIndex] = new Fraction(Convert.ToInt64(cell.FormattedValue.ToString()), 1);
+                            else
+                                funArr[cell.ColumnIndex] = new Fraction(Convert.ToInt64(cell.FormattedValue.ToString().Split('/')[0]), Convert.ToInt64(cell.FormattedValue.ToString().Split('/')[1]));
+                        }
                         else
-                            funArr[cell.ColumnIndex] = new Fraction(Convert.ToInt64(cell.FormattedValue.ToString().Split('/')[0]), Convert.ToInt64(cell.FormattedValue.ToString().Split('/')[1]));
+                        {
+                            if (cell.FormattedValue.ToString().IndexOf("/") == -1)
+                                funArr[cell.ColumnIndex] = new Fraction(-Convert.ToInt64(cell.FormattedValue.ToString()), 1);
+                            else
+                                funArr[cell.ColumnIndex] = new Fraction(-Convert.ToInt64(cell.FormattedValue.ToString().Split('/')[0]), Convert.ToInt64(cell.FormattedValue.ToString().Split('/')[1]));
+                        }
                     }
                     else
                     {
@@ -158,121 +120,6 @@ namespace simplexLaba
                     }
                 }
             }
-            int index = 0;
-            for (int i = 0; i < basis.Length; i++)
-            {
-                if (basis[i] != 0)
-                {
-                    swap(i, index);
-                    index++;
-                }
-            }
-        }
-
-        //Функция заполнения resulDataGrid значениями массивов
-        private void arrayToDataGrid()
-        {
-            //заполнение headerText, если оно происходит в первый раз
-            if (resultDataGrid.ColumnCount != functionDataGrid.ColumnCount)
-            {
-                resultDataGrid.ColumnCount = functionDataGrid.ColumnCount;
-                resultDataGrid.RowCount = functionDataGrid.RowCount;
-                foreach (DataGridViewColumn column in resultDataGrid.Columns)
-                {
-                    column.HeaderText = "x" + (column.Index + 1);
-                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
-                }
-                resultDataGrid.Columns[resultDataGrid.ColumnCount - 1].HeaderText = "";
-                int index = 0;
-                for (int i = 0; i < basis.Length; i++)
-                {
-                    if (basis[i] != 0 && index < equationsUpDown.Value)
-                    {
-                        resultDataGrid.Rows[index].HeaderCell.Value = "x" + (i + 1);
-                        resultDataGrid.Columns[i].Visible = false;
-                        index++;
-                    }
-                }
-            }
-            foreach (DataGridViewRow row in resultDataGrid.Rows)
-            {
-                foreach (DataGridViewCell cell in row.Cells)
-                {
-                    if (row.Index != resultDataGrid.RowCount - 1)
-                    {
-                        cell.Value = arr[cell.RowIndex, cell.ColumnIndex].ToString();
-                        continue;
-                    }
-                    cell.Value = funArr[cell.ColumnIndex].ToString();
-                }
-            }
-            
-        }
-
-        //Функция прибавления строки с ненулевым элементом в столбце index к строке index
-        private bool addStr(int index)
-        {
-            int foundIndex = -1;
-            if (index == arr.GetLength(0))
-                return false;
-            for (int i = index + 1; i < arr.GetLength(0); i++)
-            {
-                if (arr[i, index].numerator != 0)
-                {
-                    foundIndex = i;
-                    break;
-                }
-            }
-            if (foundIndex == -1)
-                return false;
-            for (int i = 0; i < arr.GetLength(1); i++)
-                arr[index, i] += arr[foundIndex, i];
-            return true;
-        }
-
-        private void Gaus()
-        {
-            int strs = arr.GetLength(0);
-            int cols = arr.GetLength(1);
-            for (int i = 0; i < strs - 1; i++)
-            {
-                if (arr[i, i].numerator == 0)
-                    if (!addStr(i))
-                        continue;
-                for (int j = i + 1; j < strs; j++)
-                {
-                    Fraction koef = arr[j, i] / arr[i, i];
-                    for (int k = 0; k < cols; k++)
-                        arr[j, k] -= arr[i, k] * koef;
-                }
-            }
-            for (int i = strs - 1; i > 0; i--)
-            {
-                if (arr[i, i].numerator == 0) continue;
-                for (int j = i - 1; j >= 0; j--)
-                {
-                    Fraction koef = arr[j, i] / arr[i, i];
-                    for (int k = i; k < cols; k++)
-                    {
-                        arr[j, k] -= arr[i, k] * koef;
-                    }
-                }
-            }
-            for (int i = 0; i < strs; i++)
-            {
-                if (arr[i, i].numerator == 0) continue;
-                Fraction koef = arr[i, i];
-                for (int j = i; j < cols; j++)
-                    arr[i, j] /= koef;
-            }
-            /*int index = 0;
-            for (int i = 0; i < basis.Length; i++)
-            {
-                if (basis[i] != 0)
-                {
-
-                }
-            }*/
         }
 
         private void variablesUpDown_ValueChanged(object sender, EventArgs e)
@@ -343,185 +190,12 @@ namespace simplexLaba
             return f;
         }
 
-        private bool checkForSolution()
-        {
-            for(int i = 0; i < funArr.Length; i++)
-                if (funArr[i] != funArr[funArr.Length - 1] && basis[i] == 0 && funArr[i].Value() < 0)
-                {
-                    Debug.Write(funArr[i] + " ");
-                    return true;
-                }
-            return false;
-        }
-        
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = false;
         }
 
-        private bool solveGoalFunction()
-        {
-            //Сохраняем коэффициенты переменных в функции
-            var koeffs = new List<Fraction>();
-            for (int i = 0; i < funArr.Length; i++)
-            {
-                if (i == funArr.Length - 1 || basis[i] != 0)
-                    koeffs.Add(funArr[i]);
-            }
-            var basisInd = new int?[basis.Length];
-            for(int i = 0; i < arr.GetLength(0); i++)
-            {
-                for(int j = 0; j < basis.Length; j++)
-                {
-                    if (arr[i, j].Value() == 1)
-                    {
-                        basisInd[i] = j;
-                        break;
-                    }
-                }
-                if (basisInd[i] == null)
-                    return false;
-            }
-            //Подставляем в уравнение
-            for (int i = 0; i < arr.GetLength(1); i++)//столбец
-            {
-                if (i != (arr.GetLength(1) - 1) && basis[i] != 0)
-                    continue;
-                for (int j = 0; j < arr.GetLength(0); j++)//строка
-                {
-                    Debug.WriteLine(funArr[i] + " = " + funArr[i] + " + " + koeffs[j] + " * " + (-arr[j, i]));
-                    funArr[i] = funArr[i] + koeffs[(int)basisInd[j]] * (-arr[j, i]);
-                }
-            }
-            return true;
-        }
-
-        private void solveNewCoeffs(int col, int row)
-        {
-            arr[row, col] = arr[row, col].turnOver();
-            //Пересчитываем значения в строке опорного элемента
-            for (int i = 0; i < arr.GetLength(1); i++)//столцы
-            {
-                if (i == col)
-                    continue;
-                arr[row, i] = arr[row, i] * arr[row, col];
-            }
-            for(int i = 0; i < funArr.GetLength(0); i++)
-            {
-                if (i == col)
-                    continue;
-                //Debug.WriteLine(funArr[i] + " = " + funArr[i] + " - " + (funArr[col] + " * " + arr[row, i]));
-                funArr[i] = funArr[i] - (funArr[col] * arr[row, i]);
-            }
-            for (int i = 0; i < arr.GetLength(0); i++)//строки
-            {
-                if (i == row)
-                    continue;
-                //Пересчитываем значения вне строк и столбца опорного элемента
-                for (int j = 0; j < arr.GetLength(1); j++)//столбцы
-                {
-                    if (j == col)
-                        continue;
-                    arr[i, j] = arr[i, j] - (arr[i, col] * arr[row, j]);
-                }
-                //Пересчитываем значения в столбце опорного элемента
-                arr[i, col] = -(arr[i, col] * arr[row, col]);
-
-            }
-            funArr[col] = -(funArr[col] * arr[row, col]);
-            Debug.WriteLine(resultDataGrid.Columns[col].HeaderText + " " + resultDataGrid.Rows[row].HeaderCell.Value);
-            string tmp = resultDataGrid.Columns[col].HeaderText;
-            resultDataGrid.Columns[col].HeaderText = resultDataGrid.Rows[row].HeaderCell.Value.ToString();
-            resultDataGrid.Rows[row].HeaderCell.Value = tmp;
-            //resultDataGrid.Refresh();
-        }
-
-        private void clearElems()
-        {
-            foreach (DataGridViewRow row in resultDataGrid.Rows)
-            {
-                foreach (DataGridViewCell cell in row.Cells)
-                    cell.Style.BackColor = Color.White;
-            }
-        }
-
-        //Подсвечивание возможных опроных элементов
-        private void step()
-        {
-            bool f = true;
-            int lastCol = arr.GetLength(1) - 1;
-            int lastRow = arr.GetLength(0) - 1;
-
-            for (int i = 0; i < lastCol; i++)
-            {
-                double min = double.MaxValue;
-                int minRow = -1;
-                if (funArr[i].Value() >= 0)
-                    continue;
-                for (int j = 0; j <= lastRow; j++)
-                {
-                    //Debug.WriteLine(arr[j, i] + " / " + arr[j, lastCol] + " = " + (arr[j, i] / arr[j, lastCol]).Value());
-                    if ((arr[j, i]).Value() > 0 && (arr[j, lastCol] / arr[j, i]).Value() < min)
-                    {
-                        min = (arr[j, lastCol] / arr[j, i]).Value();
-                        minRow = j;
-                    }
-                }
-                if (minRow != -1 && basis[i] == 0)
-                {
-                    f = false;
-                    resultDataGrid.Rows[minRow].Cells[i].Style.BackColor = Color.Cyan;
-                }
-            }
-            /*if(f)
-            {
-                MessageBox.Show("Система несовместна");
-                //метод окончания
-                return;
-            }   */ 
-        }
-
-        private void nextStepBtn_Click(object sender, EventArgs e)
-        {
-            int col = resultDataGrid.CurrentCell.ColumnIndex;
-            int row = resultDataGrid.CurrentCell.RowIndex;
-            if (resultDataGrid.Rows[row].Cells[col].Style.BackColor != Color.Cyan)
-            {
-                MessageBox.Show("Выберите элемент, подсвеченный голубым цветом");
-                return;
-            }
-            solveNewCoeffs(col, row);
-            arrayToDataGrid();
-            clearElems();
-            if (!checkForSolution())
-            {
-                getSolution();
-                return;
-            }
-            step();
-        }
-
-        private void getSolution()
-        {
-            label5.Text = "x = (";
-            Fraction[] solution = new Fraction[(int)variablesUpDown.Value];
-            for (int i = 0; i < arr.GetLength(0); i++)
-            {
-                Debug.WriteLine(i + " " + resultDataGrid.Rows[i].HeaderCell.Value.ToString().Split('x')[1]);
-                solution[int.Parse((resultDataGrid.Rows[i].HeaderCell.Value.ToString().Split('x')[1])) - 1] = arr[i, arr.GetLength(1) - 1];
-            }
-            for (int i = 0; i < solution.Length; i++)
-            {
-                if (solution[i] == null)
-                    solution[i] = new Fraction(0, 1);
-                if (i != solution.Length - 1)
-                    label5.Text += solution[i] + ", ";
-                else
-                    label5.Text += solution[i];
-            }
-            label5.Text += ")\n";
-            label5.Text += "f(x) = " + (-funArr[funArr.GetLength(0) - 1]);
-        }
+        
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             label4.Visible = false;
@@ -574,6 +248,20 @@ namespace simplexLaba
                         else bw.ReadBoolean();
                     }
                 }
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox2.SelectedIndex == 0)
+            {
+                textBox1.Visible = true;
+                label3.Visible = true;
+            }
+            else
+            {
+                textBox1.Visible = false;
+                label3.Visible = false;
             }
         }
     }

@@ -20,3 +20,4 @@ C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.csproj.CoreCompileInputs.cache
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.exe
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.pdb
+C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.simplexMethodForm.resources
