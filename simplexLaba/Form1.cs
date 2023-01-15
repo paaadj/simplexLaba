@@ -66,15 +66,18 @@ namespace simplexLaba
                 return;
 
             dataGridToArray();
+            bool isMin = false;
+            if(comboBox1.SelectedIndex == 0)
+                isMin = true;
             if (comboBox2.SelectedIndex == 0)
             {
-                simplexMethodForm SMF = new simplexMethodForm(arr, funArr, basis, (int)variablesUpDown.Value, (int)equationsUpDown.Value, false, null);
-                SMF.Show();
+                simplexMethodForm SMF = new simplexMethodForm(arr, funArr, basis, (int)variablesUpDown.Value, (int)equationsUpDown.Value, false, null, isMin);
+                SMF.ShowDialog();
             }
             else
             {
-                ArtificialBasisForm ABF = new ArtificialBasisForm(arr, funArr, (int)variablesUpDown.Value, (int)equationsUpDown.Value);
-                ABF.Show();
+                ArtificialBasisForm ABF = new ArtificialBasisForm(arr, funArr, (int)variablesUpDown.Value, (int)equationsUpDown.Value, isMin);
+                ABF.ShowDialog();
             }
         }
 
