@@ -48,8 +48,9 @@ namespace simplexLaba
 
         public static Fraction operator -(Fraction a, Fraction b) => a + (-b);
 
-        public static Fraction operator *(Fraction a, Fraction b) => new Fraction(a.numerator * b.numerator, a.denominator * b.denominator); 
+        public static Fraction operator *(Fraction a, Fraction b) => new Fraction(a.numerator * b.numerator, a.denominator * b.denominator);
 
+        public static Fraction operator *(Fraction a, int b) => new Fraction(a.numerator * b, a.denominator);
         public static Fraction operator /(Fraction a, Fraction b){
             if(b.numerator == 0)
             {

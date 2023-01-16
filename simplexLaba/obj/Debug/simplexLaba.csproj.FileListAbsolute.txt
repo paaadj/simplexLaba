@@ -14,7 +14,6 @@ C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\bin\Debug\simplexLaba
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\bin\Debug\simplexLaba.pdb
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.csproj.AssemblyReference.cache
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.csproj.SuggestedBindingRedirects.cache
-C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.Form1.resources
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.Properties.Resources.resources
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.csproj.GenerateResource.cache
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.csproj.CoreCompileInputs.cache
@@ -22,3 +21,6 @@ C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.pdb
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.simplexMethodForm.resources
 C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.ArtificialBasisForm.resources
+C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.AboutForm.resources
+C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.GraphicForm.resources
+C:\Users\paaad\Desktop\simplexLaba\simplexLaba\simplexLaba\obj\Debug\simplexLaba.StartForm.resources
